@@ -139,9 +139,14 @@ class InstagramScraper(object):
             raise
 
         self.session.headers = {'user-agent': CHROME_WIN_UA}
-        if self.cookiejar and os.path.exists(self.cookiejar) and os.path.getsize(self.cookiejar) > 0:
+        if self.cookiejar and os.path.exists(self.cookiejar):
             with open(self.cookiejar, 'rb') as f:
-                self.session.cookies.update(pickle.load(f))
+                try: 
+                    self.session.cookies.update(pickle.load(f))
+                except EOFError:
+                    self.logger.error("End of cookie file reached, no cookie to be unpickled.")
+                finally:
+                    self.logger.error("Cookie file could not be unpickled.") 
         self.session.cookies.set('ig_pr', '1')
         self.rhx_gis = ""
 
