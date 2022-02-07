@@ -139,7 +139,7 @@ class InstagramScraper(object):
             raise
 
         self.session.headers = {'user-agent': CHROME_WIN_UA}
-        if self.cookiejar and os.path.exists(self.cookiejar):
+        if self.cookiejar and os.path.exists(self.cookiejar) and os.path.getsize(self.cookiejar) > 0:
             with open(self.cookiejar, 'rb') as f:
                 self.session.cookies.update(pickle.load(f))
         self.session.cookies.set('ig_pr', '1')
